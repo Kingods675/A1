@@ -7,28 +7,9 @@ export default function VenueCard(props) {
 
     return (
         <div className="venue-card">
-            <img src={venue.imgSrc} alt={venue.name} />
-            <h1>{venue.name}</h1>
+            <img src={venue.imgSrc} alt={venue.name} draggable="false" />
+            <h2>{venue.name}</h2>
 
-            <Tabs>
-                <TabList>
-                    <Tab>One</Tab>
-                    <Tab>Two</Tab>
-                    <Tab>Three</Tab>
-                </TabList>
-
-                <TabPanels>
-                    <TabPanel>
-                        <p>one!</p>
-                    </TabPanel>
-                    <TabPanel>
-                        <p>two!</p>
-                    </TabPanel>
-                    <TabPanel>
-                        <p>three!</p>
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
         </div>
     )
 }
