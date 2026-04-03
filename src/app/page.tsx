@@ -5,7 +5,7 @@ import './home.css';
 
 export default function Home() {
 
-const venues = [
+  const venues = [
     {
       name: 'Venue 2',
       imgSrc:
@@ -16,7 +16,7 @@ const venues = [
       imgSrc:
         'https://res.cloudinary.com/hoangdesu/image/upload/v1701713476/YelpCamp/c6jlzo2unpqch3tfctwb.png',
     },
-        {
+    {
       name: 'Venue 2',
       imgSrc:
         'https://res.cloudinary.com/hoangdesu/image/upload/v1701769099/YelpCamp/apflkxajyzdt4sxjfajf.jpg',
@@ -58,12 +58,9 @@ const venues = [
     },
   ];
 
-   return (
-        <div>
-          <div id="venues-container">
-            {venues.map(venue => <VenueCard key={venue.name} venue={venue} />)}
-          </div>
-
-        </div>
+  return (
+    <div id="venues-container" style={{ paddingTop: '20px' }}>
+      {venues.map(venue => <VenueCard key={venue.name} venue={venue} />)}
+    </div>
   );
 }
