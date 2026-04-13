@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Heading, FormControl, FormLabel, Input, Button, VStack, Text, useToast } from '@chakra-ui/react';
+import { AppContext } from '../store/ContextProvider';
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -11,6 +12,8 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
   const toast = useToast();
+
+  const { currentUser, setCurrentUser } = useContext(AppContext);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,13 +33,14 @@ export default function SignUp() {
     }
 
     // Add new user
-    users.push({ name, email, password });
+    users.push({ name, email, password, id: crypto.randomUUID() });
     localStorage.setItem('vv_users', JSON.stringify(users));
 
     // Auto-login after signup
     localStorage.setItem('vv_currentUser', JSON.stringify({ name, email }));
 
     toast({ title: 'Account created successfully!', status: 'success' });
+    setCurrentUser({ name, email });
     router.push('/'); // redirect to home
   };
 
@@ -71,7 +75,7 @@ export default function SignUp() {
 
           <Text fontSize="sm">
             Already have an account?{' '}
-            <Button variant="link" colorScheme="blue" onClick={() => router.push('/Signin')}>
+            <Button variant="link" colorScheme="blue" onClick={() => router.push('/signin')}>
               Sign In
             </Button>
           </Text>

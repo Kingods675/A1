@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, Heading, FormControl, FormLabel, Input, Button, VStack, Text, useToast } from '@chakra-ui/react';
-
+import { AppContext } from '../store/ContextProvider';
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const toast = useToast();
+  const { currentUser, setCurrentUser } = useContext(AppContext);
 
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -17,8 +19,10 @@ export default function SignIn() {
     const user = users.find((u: any) => u.email === email && u.password === password);
 
     if (user) {
-      localStorage.setItem('vv_currentUser', JSON.stringify({ name: user.name, email: user.email }));
+      const { password, ...currUser } = user;
+      localStorage.setItem('vv_currentUser', JSON.stringify(currUser));
       toast({ title: `Welcome back, ${user.name}!`, status: 'success' });
+      setCurrentUser(currUser);
       router.push('/'); // redirect to home
     } else {
       toast({ title: 'Invalid email or password', status: 'error' });
@@ -46,7 +50,7 @@ export default function SignIn() {
 
           <Text fontSize="sm">
             Don&apos;t have an account?{' '}
-            <Button variant="link" colorScheme="blue" onClick={() => router.push('/Signup')}>
+            <Button variant="link" colorScheme="blue" onClick={() => router.push('/signup')}>
               Sign Up
             </Button>
           </Text>

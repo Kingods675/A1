@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./Providers";
+import ContextProvider from "./store/ContextProvider";
 import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
 
@@ -29,16 +30,18 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      suppressHydrationWarning    
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-         <Providers>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+        <Providers>
+          <ContextProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </ContextProvider>
         </Providers>
 
-        </body>
-    </html>
+    </body>
+    </html >
   );
 }
