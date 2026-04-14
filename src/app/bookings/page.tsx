@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useContext, useState } from 'react';   // ← useState added here
+import { useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Box, Heading, Text, SimpleGrid, Image, Badge, Button,
@@ -8,20 +8,30 @@ import {
 } from '@chakra-ui/react';
 import { AppContext } from '../store/ContextProvider';
 
-
 export default function MyBookingsPage() {
   const { currentUser } = useContext(AppContext);
   const router = useRouter();
   const toast = useToast();
 
+  const [myBookings, setMyBookings] = useState<any[]>([]);
 
-  const [bookings, setBookings] = useState<any[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('vv_my_bookings');
-      return saved ? JSON.parse(saved) : [];
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const lsBookings = localStorage.getItem('vv_bookings') || '[]';
+
+    try {
+      const bookings = JSON.parse(lsBookings);
+
+      const filtered = bookings.filter(
+        (bk: any) => bk.hirer?.id === currentUser.id
+      );
+
+      setMyBookings(filtered);
+    } catch (e) {
+      console.error(e);
     }
-    return [];
-  });
+  }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser) {
@@ -30,12 +40,13 @@ export default function MyBookingsPage() {
   }, [currentUser, router]);
 
   const cancelBooking = (id: number) => {
-    const updated = bookings.filter((b: any) => b.id !== id);
-    setBookings(updated);
-    localStorage.setItem('vv_my_bookings', JSON.stringify(updated));
+    const updated = myBookings.filter((b) => b.id !== id);
+    setMyBookings(updated);
+
+    localStorage.setItem('vv_bookings', JSON.stringify(updated));
+
     toast({ title: 'Booking cancelled', status: 'info' });
   };
-
 
   if (!currentUser) {
     return <Text p={8}>Redirecting to sign in...</Text>;
@@ -47,16 +58,18 @@ export default function MyBookingsPage() {
         My Bookings – Welcome, {currentUser.name}!
       </Heading>
 
-      {bookings.length === 0 ? (
+      {myBookings.length === 0 ? (
         <Box textAlign="center" py={20}>
-          <Text fontSize="2xl" color="gray.500">You have no bookings yet.</Text>
+          <Text fontSize="2xl" color="gray.500">
+            You have no bookings yet.
+          </Text>
           <Button mt={6} colorScheme="blue" onClick={() => router.push('/')}>
             Browse Venues
           </Button>
         </Box>
       ) : (
         <SimpleGrid columns={[1, 2]} spacing={8}>
-          {bookings.map((booking: any) => (
+          {myBookings.map((booking) => (
             <Box
               key={booking.id}
               bg="white"
@@ -67,8 +80,8 @@ export default function MyBookingsPage() {
             >
               <Flex gap={6}>
                 <Image
-                  src={booking.imgSrc}
-                  alt={booking.venueName}
+                  src={booking.venue.imgSrc}
+                  alt={booking.venue.name}
                   width="140px"
                   height="140px"
                   objectFit="cover"
@@ -77,11 +90,14 @@ export default function MyBookingsPage() {
 
                 <Box flex="1">
                   <HStack justify="space-between" mb={3}>
-                    <Heading size="md">{booking.venueName}</Heading>
+                    <Heading size="md">{booking.venue.name}</Heading>
                     <Badge
                       colorScheme={
-                        booking.status === 'confirmed' ? 'green' :
-                        booking.status === 'cancelled' ? 'red' : 'orange'
+                        booking.status === 'confirmed'
+                          ? 'green'
+                          : booking.status === 'cancelled'
+                            ? 'red'
+                            : 'orange'
                       }
                       px={3}
                       py={1}
@@ -116,14 +132,17 @@ export default function MyBookingsPage() {
                     <Text fontSize="lg" fontWeight="bold">
                       Total: ${booking.total.toFixed(2)}
                     </Text>
-                    <Button
-                      size="sm"
-                      colorScheme="red"
-                      variant="outline"
-                      onClick={() => cancelBooking(booking.id)}
-                    >
-                      Cancel Booking
-                    </Button>
+                    {booking.status === 'pending' && (
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        variant="outline"
+                        onClick={() => cancelBooking(booking.id)}
+                      >
+                        Cancel Booking
+                      </Button>
+                    )}
+
                   </HStack>
                 </Box>
               </Flex>

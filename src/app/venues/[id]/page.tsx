@@ -10,6 +10,7 @@ import {
   AccordionButton, AccordionPanel, AccordionIcon
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { AppContext } from '@/app/store/ContextProvider';
 
 export default function VenueDetailPage({
   params,
@@ -17,6 +18,7 @@ export default function VenueDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const { currentUser } = use(AppContext);
   const [venue, setVenue] = useState<Venue | null>(null);
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
@@ -58,12 +60,11 @@ export default function VenueDetailPage({
       return;
     }
 
-    const bookings = JSON.parse(localStorage.getItem('vv_my_bookings') || '[]');
+    const bookings = JSON.parse(localStorage.getItem('vv_bookings') || '[]');
     const newBooking = {
       id: Date.now(),
-      venueId: venue?.id,
-      venueName: venue?.name,
-      imgSrc: venue?.imgSrc,
+      hirer: currentUser,
+      venue: venue,
       checkIn,
       checkOut,
       nights,
@@ -74,7 +75,7 @@ export default function VenueDetailPage({
     };
 
     bookings.push(newBooking);
-    localStorage.setItem('vv_my_bookings', JSON.stringify(bookings));
+    localStorage.setItem('vv_bookings', JSON.stringify(bookings));
 
     toast({
       title: 'Reservation request submitted!',
@@ -145,9 +146,9 @@ export default function VenueDetailPage({
             <FormControl>
               <FormLabel>Guests</FormLabel>
               <HStack bg="gray.50" borderRadius="xl" p={2} justify="space-between">
-                <IconButton icon={<MinusIcon />} aria-label="minus" onClick={() => setGuests(Math.max(1, guests - 1))} isDisabled={guests <= 1} />
+                {/* <IconButton icon={<MinusIcon />} aria-label="minus" onClick={() => setGuests(Math.max(1, guests - 1))} isDisabled={guests <= 1} /> */}
                 <Text fontSize="2xl" fontWeight="semibold" w="12" textAlign="center">{guests}</Text>
-                <IconButton icon={<AddIcon />} aria-label="plus" onClick={() => setGuests(guests + 1)} />
+                {/* <IconButton icon={<AddIcon />} aria-label="plus" onClick={() => setGuests(guests + 1)} /> */}
               </HStack>
             </FormControl>
 
