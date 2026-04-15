@@ -34,7 +34,7 @@ export default function Header() {
         <Spacer />
         <HStack spacing={6} fontWeight="medium">
           <Link href="/">Home</Link>
-          <Link href="/...">...</Link>
+          <Link href="/vendor">Vendor</Link>
           <Link href="/bookings">My Bookings</Link>
         </HStack>
 
