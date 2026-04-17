@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Heading, Text, VStack } from '@chakra-ui/react';
+import {Box, Heading, Text} from '@chakra-ui/react';
 
 type Review = {
   id: number;
@@ -26,8 +26,8 @@ const venueReviews = reviews.filter(review => review.venueId === venueId);
 
 //calcuating the average rating
 const averageRating = venueReviews.length > 0
-    ? (venueReviews.reduce((sum, review) => sum + review.rating, 0) / venueReviews.length).toFixed(1)
-    : 'No ratings yet';
+? (venueReviews.reduce((sum, review) => sum + review.rating, 0) / venueReviews.length).toFixed(1)
+: '0';
 
 
 //ratings and reviews layout
@@ -40,11 +40,13 @@ return (
   </Box>
 );
 
+//layout for when there are no reviews 
+{venueReviews.length == 0 ? (
+    <Text>No reviews yet.</Text>
+) : (  <Text>{averageRating} / 5 ({venueReviews.length} reviews)</Text>
+)}
 
-
-
-
-  }
+}
 
 
 
