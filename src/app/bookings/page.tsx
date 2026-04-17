@@ -15,6 +15,11 @@ export default function MyBookingsPage() {
 
   const [myBookings, setMyBookings] = useState<any[]>([]);
 
+//Booking history section
+const bookingHistory = myBookings.filter(booking => booking.status === 'cancelled' || 
+  booking.status === 'completed');
+
+
   useEffect(() => {
     if (!currentUser) return;
 
