@@ -1,6 +1,8 @@
 'use client';
 
 import {Box, Heading, Text} from '@chakra-ui/react';
+import { useState } from 'react';
+
 
 type Review = {
   id: number;
@@ -37,14 +39,18 @@ return (
     <Text>
       {averageRating} / 5 ({venueReviews.length} reviews)
     </Text>
-  </Box>
-);
 
-//layout for when there are no reviews 
-{venueReviews.length == 0 ? (
+    //layout for when there are no reviews 
+ {venueReviews.length == 0 ? (
     <Text>No reviews yet.</Text>
 ) : (  <Text>{averageRating} / 5 ({venueReviews.length} reviews)</Text>
 )}
+
+  </Box>
+
+);
+
+
 
 }
 
