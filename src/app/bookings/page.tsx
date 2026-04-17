@@ -111,7 +111,7 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                       {booking.status.toUpperCase()}
                     </Badge>
                   </HStack>
-
+  
                   <VStack align="start" spacing={2} fontSize="sm">
                     <HStack>
                       <Text fontWeight="semibold">Check-in:</Text>
@@ -130,10 +130,7 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                       <Text>{booking.guests}</Text>
                     </HStack>
                   
-                  //Adding preferences section for venues. 
-                  <HStack><Text fontWeight="semibold">Venue Preferences:</Text> 
-                  <Text>{booking.preferenceRank || 'Not yet set.'}</Text>
-                  </HStack>
+    
                    
                    //Adding event details section to the booking summary
                    <HStack>
@@ -150,7 +147,7 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
 
 
                   </VStack>
-
+  
                   <Divider my={4} />
 
                   <HStack justify="space-between">
@@ -169,6 +166,13 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                     )}
 
                   </HStack>
+
+                     //Adding preferences section for venues. 
+                  <HStack><Text fontWeight="semibold">Venue Preferences:</Text> 
+                  <Text>{booking.preferenceRank || 'Not yet set.'}</Text>
+                  </HStack>
+
+                  
                 </Box>
               </Flex>
             </Box>
