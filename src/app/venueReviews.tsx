@@ -21,4 +21,31 @@ export default function VenueReviews({ venueId }: { venueId: number }) {
     }
 }
 
+//filter reviews for only the current venue 
+const venueReviews = reviews.filter(review => review.venueId === venueId);
+
+//calcuating the average rating
+const averageRating = venueReviews.length > 0
+    ? (venueReviews.reduce((sum, review) => sum + review.rating, 0) / venueReviews.length).toFixed(1)
+    : 'No ratings yet';
+
+
+//ratings and reviews layout
+return (
+  <Box mt={16}>
+    <Heading size="lg">Reviews</Heading>
+    <Text>
+      {averageRating} / 5 ({venueReviews.length} reviews)
+    </Text>
+  </Box>
+);
+
+
+
+
+
   }
+
+
+
+
