@@ -15,7 +15,7 @@ export default function MyBookingsPage() {
 
   const [myBookings, setMyBookings] = useState<any[]>([]);
 
-//Booking history section
+//defining booking history
 const bookingHistory = myBookings.filter(booking => booking.status === 'cancelled' || 
   booking.status === 'completed');
 
@@ -131,7 +131,11 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                     </HStack>
                   
     
-                   
+                    //Adding preferences section for venues. 
+                  <HStack><Text fontWeight="semibold">Venue Preferences:</Text> 
+                  <Text>{booking.preferenceRank || 'Not yet set.'}</Text>
+                  </HStack>
+
                    //Adding event details section to the booking summary
                    <HStack>
                     <Text fontWeight="semibold">Event Name:</Text>
@@ -144,7 +148,7 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                     <Text>{booking.eventDuration || 'Not yet set.'}</Text>
 
                    </HStack>
-
+ 
 
                   </VStack>
   
@@ -167,18 +171,51 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
 
                   </HStack>
 
-                     //Adding preferences section for venues. 
-                  <HStack><Text fontWeight="semibold">Venue Preferences:</Text> 
-                  <Text>{booking.preferenceRank || 'Not yet set.'}</Text>
-                  </HStack>
 
-                  
                 </Box>
               </Flex>
             </Box>
           ))}
         </SimpleGrid>
+
       )}
+      
+    //booking history section
+      <Box mt={12}>
+  <Heading size="md" mb={6} color="blue.600">
+    Hiring History
+  </Heading>
+
+
+//Checking if there are past bookings
+  {bookingHistory.length === 0 ? (
+    <Text color="gray.500">No past bookings yet.</Text>
+  ) : (
+    <SimpleGrid columns={[1, 2]} spacing={6}>
+    {bookingHistory.map((booking) => (
+      //card for each booking summary
+       <Box
+          key={booking.id}
+          bg="white"
+          borderRadius="xl"
+          boxShadow="md"
+          p={5}
+        >
+      <VStack align="start" spacing={2}>
+        <Text><strong>Venue:</strong> {booking.venue.name}</Text>
+        <Text><strong>Location:</strong> {booking.venue.location}</Text>
+        <Text><strong>Event:</strong> {booking.eventName || 'Not set yet'}</Text>
+        <Text><strong>Date of Hire:</strong> {booking.checkIn}</Text>
+        <Text><strong>Rating:</strong> {booking.rating || 0} / 5</Text>
+      </VStack>
+        </Box>
+      ))}
+    </SimpleGrid>
+  )}
+</Box>
+
     </Box>
+
+
   );
 }
