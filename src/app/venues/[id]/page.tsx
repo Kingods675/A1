@@ -30,6 +30,13 @@ export default function VenueDetailPage({
   const [discount, setDiscount] = useState({ valid: false, percentage: 0, amount: 0 });
   const toast = useToast();
 
+  //Section for Event details, time and duration
+const [eventName, setEventName] = useState('');
+const [eventTime, setEventTime] = useState('');
+const [duration, setDuration] = useState('');
+
+
+
   useEffect(() => {
     const savedVenues = localStorage.getItem('vv_venues');
     let allVenues: Venue[] = savedVenues ? JSON.parse(savedVenues) : venues;
@@ -72,6 +79,9 @@ export default function VenueDetailPage({
       checkOut,
       nights,
       guests,
+      eventName,
+      eventTime,
+      duration,
       pricePerNight,
       total: totalAfterDiscount,
       status: 'pending',
@@ -133,8 +143,44 @@ export default function VenueDetailPage({
             </Text>
             {nights > 0 && <Text fontSize="lg">{nights} {nights === 1 ? 'night' : 'nights'}</Text>}
           </HStack>
+                 
 
           <VStack spacing={6} align="stretch">
+
+//event details section, with time and duration inputs
+<Box>
+  <Heading size="sm" mb={2}>Event Details</Heading>
+
+  <FormControl mb={3}>
+    <FormLabel>Event Name</FormLabel>
+    <Input
+      placeholder="e.g. Birthday Party"
+      value={eventName}
+      onChange={(e) => setEventName(e.target.value)}
+    />
+  </FormControl>
+
+  <FormControl mb={3}>
+    <FormLabel>Event Time</FormLabel>
+    <Input
+      type="time"
+      value={eventTime}
+      onChange={(e) => setEventTime(e.target.value)}
+    />
+  </FormControl>
+
+  <FormControl>
+    <FormLabel>Duration (hours)</FormLabel>
+    <Input
+      type="number"
+      placeholder="e.g. 4"
+      value={duration}
+      onChange={(e) => setDuration(e.target.value)}
+    />
+  </FormControl>
+</Box>
+
+
             {/* Dates */}
             <Flex gap={4}>
               <FormControl>
