@@ -180,14 +180,12 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
 
       )}
       
-    //booking history section
+  {/*booking history section*/}
       <Box mt={12}>
   <Heading size="md" mb={6} color="blue.600">
     Hiring History
   </Heading>
 
-
-//Checking if there are past bookings
   {bookingHistory.length === 0 ? (
     <Text color="gray.500">No past bookings yet.</Text>
   ) : (
