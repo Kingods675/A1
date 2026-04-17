@@ -124,6 +124,26 @@ export default function MyBookingsPage() {
                       <Text fontWeight="semibold">Guests:</Text>
                       <Text>{booking.guests}</Text>
                     </HStack>
+                  
+                  //Adding preferences section for venues. 
+                  <HStack><Text fontWeight="Venue Preferences:">Guests:</Text> 
+                  <Text>{booking.preferenceRank || 'Not yet set.'}</Text>
+                  </HStack>
+                   
+                   //Adding event details section to the booking summary
+                   <HStack>
+                    <Text fontWeight="Event Name:">Event:</Text>
+                    <Text>{booking.eventName || 'Not yet set.'}</Text>
+
+                    <Text fontWeight="Event Time:">Event:</Text>
+                    <Text>{booking.eventTime || 'Not yet set.'}</Text>
+
+                    <Text fontWeight="Event Duration:">Event:</Text>
+                    <Text>{booking.eventDuration || 'Not yet set.'}</Text>
+
+                   </HStack>
+
+
                   </VStack>
 
                   <Divider my={4} />

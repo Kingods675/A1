@@ -11,8 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { AppContext } from '@/app/store/ContextProvider';
-import venueReviews  from '@/app/venueReviews'; //importing the venueReviews component for display
-
+import VenueReviews  from '@/app/venueReviews'; //importing the venueReviews component for display
 
 
 export default function VenueDetailPage({
