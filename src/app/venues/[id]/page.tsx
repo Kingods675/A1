@@ -11,6 +11,9 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { AppContext } from '@/app/store/ContextProvider';
+import venueReviews  from '@/app/venueReviews'; //importing the venueReviews component for display
+import VenueReviews from '@/app/venueReviews';
+
 
 export default function VenueDetailPage({
   params,
@@ -107,6 +110,8 @@ export default function VenueDetailPage({
   return (
     <Box maxW="7xl" mx="auto" px={8} py={12}>
       <Flex gap={12} flexWrap="wrap">
+
+
         {/* Venue Info */}
         <Box flex="1" minW="400px">
           <Image src={venue.imgSrc} alt={venue.name} w="full" h="500px" objectFit="cover" borderRadius="2xl" mb={6} />
@@ -208,6 +213,10 @@ export default function VenueDetailPage({
           </VStack>
         </Box>
       </Flex>
+
+        //Reviews section
+     {venue && <VenueReviews venueId={venue.id} />}
+
     </Box>
   );
 }
