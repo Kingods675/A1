@@ -40,7 +40,7 @@ return (
       {averageRating} / 5 ({venueReviews.length} reviews)
     </Text>
 
-    //layout for when there are no reviews 
+    {/* layout for when there are no reviews */}
  {venueReviews.length == 0 ? (
     <Text>No reviews yet.</Text>
 ) : (  <Text>{averageRating} / 5 ({venueReviews.length} reviews)</Text>

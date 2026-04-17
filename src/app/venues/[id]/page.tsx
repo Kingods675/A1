@@ -259,7 +259,7 @@ const [duration, setDuration] = useState('');
         </Box>
       </Flex>
 
-        //Reviews section
+        {/* Reviews section */}
      {venue && <VenueReviews venueId={venue.id} />}
 
     </Box>

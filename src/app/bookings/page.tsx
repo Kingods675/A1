@@ -161,13 +161,13 @@ const setPreferenceRank = (bookingId: number, rank: number) => {
                    {/*Adding event details section to the booking summary*/}
                    <HStack>
                     <Text fontWeight="semibold">Event Name:</Text>
-                    <Text>{booking.eventName || 'Not yet set.'}</Text>
+                    <Text>{booking.eventName || 'N/A'}</Text>
 
                     <Text fontWeight="semibold">Event Time:</Text>
-                    <Text>{booking.eventTime || 'Not yet set.'}</Text>
+                    <Text>{booking.eventTime || 'N/A'}</Text>
 
                     <Text fontWeight="semibold">Event Duration:</Text>
-                    <Text>{booking.eventDuration || 'Not yet set.'}</Text>
+                    <Text>{booking.eventDuration || 'N/A'}</Text>
 
                    </HStack>
 
