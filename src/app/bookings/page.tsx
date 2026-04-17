@@ -16,8 +16,10 @@ export default function MyBookingsPage() {
   const [myBookings, setMyBookings] = useState<any[]>([]);
 
 //defining booking history
-const bookingHistory = myBookings.filter(booking => booking.status === 'cancelled' || 
-  booking.status === 'completed');
+const bookingHistory = myBookings.filter(
+  booking => booking.status === 'confirmed'
+);
+
 
 
   useEffect(() => {
@@ -52,6 +54,31 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
 
     toast({ title: 'Booking cancelled', status: 'info' });
   };
+
+{/*Preferences ranking section */}
+const setPreferenceRank = (bookingId: number, rank: number) => {
+  const allBookings = JSON.parse(localStorage.getItem('vv_bookings') || '[]');
+
+  const updatedAllBookings = allBookings.map((booking: any) =>
+    booking.id === bookingId ? { ...booking, preferenceRank: rank } : booking
+  );
+
+  localStorage.setItem('vv_bookings', JSON.stringify(updatedAllBookings));
+
+  const updatedMyBookings = updatedAllBookings.filter(
+    (booking: any) => booking.hirer?.id === currentUser.id
+  );
+
+  setMyBookings(updatedMyBookings);
+
+  toast({
+    title: `Preference rank ${rank} saved`,
+    status: 'success',
+  });
+};
+
+
+
 
   if (!currentUser) {
     return <Text p={8}>Redirecting to sign in...</Text>;
@@ -129,14 +156,9 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                       <Text fontWeight="semibold">Guests:</Text>
                       <Text>{booking.guests}</Text>
                     </HStack>
-                  
-    
-                    //Adding preferences section for venues. 
-                  <HStack><Text fontWeight="semibold">Venue Preferences:</Text> 
-                  <Text>{booking.preferenceRank || 'Not yet set.'}</Text>
-                  </HStack>
+                
 
-                   //Adding event details section to the booking summary
+                   {/*Adding event details section to the booking summary*/}
                    <HStack>
                     <Text fontWeight="semibold">Event Name:</Text>
                     <Text>{booking.eventName || 'Not yet set.'}</Text>
@@ -148,6 +170,44 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                     <Text>{booking.eventDuration || 'Not yet set.'}</Text>
 
                    </HStack>
+
+{/*Adding preference ranking section to the booking summary*/}
+                  
+<Box pt={2}>
+  <Text fontWeight="semibold" mb={2}>
+    Venue Preference Rank
+  </Text>
+
+  <HStack spacing={2}>
+    <Button
+      size="xs"
+      onClick={() => setPreferenceRank(booking.id, 1)}
+      colorScheme={booking.preferenceRank === 1 ? 'blue' : 'gray'}
+    >
+      1
+    </Button>
+
+    <Button
+      size="xs"
+      onClick={() => setPreferenceRank(booking.id, 2)}
+      colorScheme={booking.preferenceRank === 2 ? 'blue' : 'gray'}
+    >
+      2
+    </Button>
+
+    <Button
+      size="xs"
+      onClick={() => setPreferenceRank(booking.id, 3)}
+      colorScheme={booking.preferenceRank === 3 ? 'blue' : 'gray'}
+    >
+      3
+    </Button>
+  </HStack>
+
+  <Text mt={2}>
+    Current Rank: {booking.preferenceRank || 'Not set'}
+  </Text>
+</Box>  
  
 
                   </VStack>
