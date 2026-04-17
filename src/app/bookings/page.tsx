@@ -131,19 +131,19 @@ const bookingHistory = myBookings.filter(booking => booking.status === 'cancelle
                     </HStack>
                   
                   //Adding preferences section for venues. 
-                  <HStack><Text fontWeight="Venue Preferences:">Guests:</Text> 
+                  <HStack><Text fontWeight="semibold">Venue Preferences:</Text> 
                   <Text>{booking.preferenceRank || 'Not yet set.'}</Text>
                   </HStack>
                    
                    //Adding event details section to the booking summary
                    <HStack>
-                    <Text fontWeight="Event Name:">Event:</Text>
+                    <Text fontWeight="semibold">Event Name:</Text>
                     <Text>{booking.eventName || 'Not yet set.'}</Text>
 
-                    <Text fontWeight="Event Time:">Event:</Text>
+                    <Text fontWeight="semibold">Event Time:</Text>
                     <Text>{booking.eventTime || 'Not yet set.'}</Text>
 
-                    <Text fontWeight="Event Duration:">Event:</Text>
+                    <Text fontWeight="semibold">Event Duration:</Text>
                     <Text>{booking.eventDuration || 'Not yet set.'}</Text>
 
                    </HStack>
