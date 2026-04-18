@@ -16,6 +16,9 @@ export default function VenuesPage() {
 
     const [myVenues, setMyVenues] = useState<any[]>([]);
     const [bookingRequests, setBookingRequests] = useState<any[]>([]);
+
+    
+
     const [form, setForm] = useState({ name: '', imgSrc: '', location: '', capacity: '', price: '' });
 
     useEffect(() => {
@@ -156,11 +159,28 @@ export default function VenuesPage() {
                                             <Image src={req.venue.imgSrc} alt="" boxSize="80px" borderRadius="lg" objectFit="cover" />
                                             <Box flex={1}>
                                                 <Heading size="md">{req.venue.name}</Heading>
+                                                {/*Displaying Hirer Information */}
                                                 <Text color="gray.500">Requested by: {req.hirerName}</Text>
+                                               <Text fontSize="sm" color="gray.500">
+                                                Previous bookings: {req.hirer?.bookingCount || 0}
+                                                </Text>
+
                                                 <Text>{req.checkIn} → {req.checkOut} ({req.nights} nights)</Text>
                                                 <Text>Guests: {req.guests} | Total: ${req.total}</Text>
                                             </Box>
                                         </HStack>
+                            {/* Comment input for each booking request */}
+                             <Input mt={4}
+                                      placeholder="Add comment..."
+                                      value={req.comment || ''}
+                                   onChange={(e) => { const allBookings = JSON.parse(localStorage.getItem('vv_bookings') || '[]');
+                                   const updated = allBookings.map((b: any) =>
+                                  b.id === req.id ? { ...b, comment: e.target.value } : b
+                                    );
+                               localStorage.setItem('vv_bookings', JSON.stringify(updated));
+                              setBookingRequests(updated);
+                                }}
+                            />
                                         <HStack mt={6} spacing={4}>
                                             {req.status === 'pending' && (
                                                 <>
@@ -174,14 +194,34 @@ export default function VenuesPage() {
                                             {req.status === 'rejected' && (
                                                 <span>Rejected</span>
                                             )}
-
-
-                                            
+                        
                                         </HStack>
                                     </Box>
                                 ))}
                             </SimpleGrid>
+
+
+
                         )}
+           
+             {bookingRequests.some((req: any) => req.status !== 'pending') && (
+             <>
+             <Heading size="md" mt={8}>Booking History</Heading>
+
+             <SimpleGrid columns={[1, 2]} spacing={6}>
+              {bookingRequests
+               .filter((req: any) => req.status !== 'pending')
+                  .map((req: any) => (
+                 <Box key={req.id} bg="gray.50" p={6} borderRadius="xl">
+                 <Text>{req.venue.name}</Text>
+                <Text>Status: {req.status}</Text>
+               <Text>Comment: {req.comment || 'None'}</Text>
+               </Box>
+              ))}
+            </SimpleGrid>
+             </>
+             )}
+
                     </TabPanel>
                 </TabPanels>
             </Tabs>
