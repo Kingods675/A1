@@ -51,7 +51,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className='px-32'>
+      <div className='px-50 mt-4'>
         <form onSubmit={onVenueSearch}>
           <FormControl className='flex flex-row items-center justify-center gap-2 mb-8'>
             <Input
