@@ -263,7 +263,7 @@ export default function VenuesPage() {
                       <h1>Addtional documents</h1>
                       <h2>Driver's License</h2>
                       <img
-                        src={`data:image/jpeg;base64,${req.additionalDocuments.driverLicense}`}
+                        src={`data:image/jpeg;base64,${req.additionalDocuments?.driverLicense}`}
                         alt='Driver Licence'
                       />
                     </div>

@@ -27,7 +27,12 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { AppContext } from '@/app/store/ContextProvider';
+<<<<<<< HEAD
 import VenueReviews from '@/app/venueReviews'; //importing the venueReviews component for display
+=======
+import VenueReviews  from '@/app/venueReviews'; //importing the venueReviews component for display
+import WriteReview from '@/app/writeVenueReview';
+>>>>>>> 47c648d3615c8d49648a8f80830c9d6ca71dade9
 
 export default function VenueDetailPage({
   params,
@@ -245,6 +250,7 @@ export default function VenueDetailPage({
                 Event Details
               </Heading>
 
+<<<<<<< HEAD
               <FormControl mb={3}>
                 <FormLabel>Event Name</FormLabel>
                 <Input
@@ -253,6 +259,40 @@ export default function VenueDetailPage({
                   onChange={(e) => setEventName(e.target.value)}
                 />
               </FormControl>
+=======
+{/*event details section, with time and duration inputs*/}
+<Box>
+  <Heading size="sm" mb={2}>Event Details</Heading>
+
+  <FormControl mb={3}>
+    <FormLabel>Event Name</FormLabel>
+    <Input
+      placeholder="e.g. Birthday Party"
+      value={eventName}
+      onChange={(e) => setEventName(e.target.value)}
+    />
+  </FormControl>
+
+  <FormControl mb={3}>
+    <FormLabel>Event Time</FormLabel>
+    <Input
+      type="time"
+      value={eventTime}
+      onChange={(e) => setEventTime(e.target.value)}
+    />
+  </FormControl>
+
+  <FormControl>
+    <FormLabel>Duration (hours)</FormLabel>
+    <Input
+      type="number"
+      placeholder="e.g. 4"
+      value={duration}
+      onChange={(e) => setDuration(e.target.value)}
+    />
+  </FormControl>
+</Box>
+>>>>>>> 47c648d3615c8d49648a8f80830c9d6ca71dade9
 
               <FormControl mb={3}>
                 <FormLabel>Event Time</FormLabel>
@@ -325,6 +365,7 @@ export default function VenueDetailPage({
               </HStack>
             </FormControl>
             <Divider />
+
             {/* Show Details Accordion */}
             {nights > 0 && (
               <Accordion defaultIndex={[0]} allowToggle>
@@ -416,8 +457,14 @@ export default function VenueDetailPage({
         </Box>
       </Flex>
 
+<<<<<<< HEAD
       {/* Reviews section */}
       {venue && <VenueReviews venueId={venue.id} />}
+=======
+        {/* Reviews section */}
+     {venue && <VenueReviews venueId={venue.id} />}
+     {venue && <WriteReview venueId={venue.id} />}
+>>>>>>> 47c648d3615c8d49648a8f80830c9d6ca71dade9
     </Box>
   );
 }
