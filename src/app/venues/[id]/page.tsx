@@ -146,7 +146,7 @@ const [duration, setDuration] = useState('');
 
           <VStack spacing={6} align="stretch">
 
-//event details section, with time and duration inputs
+{/*event details section, with time and duration inputs*/}
 <Box>
   <Heading size="sm" mb={2}>Event Details</Heading>
 
