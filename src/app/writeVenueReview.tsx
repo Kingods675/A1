@@ -44,7 +44,7 @@ return (
   <Box mt={8}>
     <VStack spacing={4} align="stretch">
       <FormControl isRequired>
-        <FormLabel>Rating</FormLabel>
+        <FormLabel>Rating out of Five Stars</FormLabel>
         <Select
           placeholder="Select rating"
           value={rating}
