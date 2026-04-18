@@ -51,6 +51,7 @@ export default function Home() {
 
   return (
     <div>
+<<<<<<< HEAD
     {/*Introduction to website*/}
 <div className='px-12 pt-8'>
 <div className='relative w-full h-[520px] rounded-3xl overflow-hidden shadow-xl'>
@@ -90,6 +91,9 @@ Discover venues and manage your bookings in one place.
 
 
       <div className='px-32'>
+=======
+      <div className='px-50 mt-4'>
+>>>>>>> 238572f3114f7f43caf0a19954e5d0a21131fe85
         <form onSubmit={onVenueSearch}>
           <FormControl className='flex flex-row items-center justify-center gap-2 mb-8'>
             <Input

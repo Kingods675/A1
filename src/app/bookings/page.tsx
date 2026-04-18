@@ -47,10 +47,15 @@ const bookingHistory = myBookings.filter(
   }, [currentUser, router]);
 
   const cancelBooking = (id: number) => {
-    const updated = myBookings.filter((b) => b.id !== id);
-    setMyBookings(updated);
+    // const updated = myBookings.filter((b) => b.id !== id);
+    // setMyBookings(updated);
+    const updated = myBookings.map((b: any) =>
+            b.id === id ? { ...b, status: 'cancelled' } : b
+        );
+        localStorage.setItem('vv_bookings', JSON.stringify(updated));
+        setMyBookings(updated)
 
-    localStorage.setItem('vv_bookings', JSON.stringify(updated));
+    // localStorage.setItem('vv_bookings', JSON.stringify(updated));
 
     toast({ title: 'Booking cancelled', status: 'info' });
   };
