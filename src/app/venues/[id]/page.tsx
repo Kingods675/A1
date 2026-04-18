@@ -27,12 +27,9 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { AppContext } from '@/app/store/ContextProvider';
-<<<<<<< HEAD
+
 import VenueReviews from '@/app/venueReviews'; //importing the venueReviews component for display
-=======
-import VenueReviews  from '@/app/venueReviews'; //importing the venueReviews component for display
 import WriteReview from '@/app/writeVenueReview';
->>>>>>> 47c648d3615c8d49648a8f80830c9d6ca71dade9
 
 export default function VenueDetailPage({
   params,
@@ -58,6 +55,8 @@ export default function VenueDetailPage({
   const [eventTime, setEventTime] = useState('');
   const [duration, setDuration] = useState('');
 
+
+
   useEffect(() => {
     const savedVenues = localStorage.getItem('vv_venues');
     let allVenues: Venue[] = savedVenues ? JSON.parse(savedVenues) : venues;
@@ -72,12 +71,12 @@ export default function VenueDetailPage({
   const nights =
     checkIn && checkOut
       ? Math.max(
-          0,
-          Math.ceil(
-            (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
-              (1000 * 60 * 60 * 24),
-          ),
-        )
+        0,
+        Math.ceil(
+          (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
+          (1000 * 60 * 60 * 24),
+        ),
+      )
       : 0;
 
   const pricePerNight = venue?.price || 250;
@@ -244,55 +243,40 @@ export default function VenueDetailPage({
           </HStack>
 
           <VStack spacing={6} align='stretch'>
-            //event details section, with time and duration inputs
+
             <Box>
-              <Heading size='sm' mb={2}>
-                Event Details
-              </Heading>
+              {/*event details section, with time and duration inputs*/}
+              <Box>
+                <Heading size="sm" mb={2}>Event Details</Heading>
 
-<<<<<<< HEAD
-              <FormControl mb={3}>
-                <FormLabel>Event Name</FormLabel>
-                <Input
-                  placeholder='e.g. Birthday Party'
-                  value={eventName}
-                  onChange={(e) => setEventName(e.target.value)}
-                />
-              </FormControl>
-=======
-{/*event details section, with time and duration inputs*/}
-<Box>
-  <Heading size="sm" mb={2}>Event Details</Heading>
+                <FormControl mb={3}>
+                  <FormLabel>Event Name</FormLabel>
+                  <Input
+                    placeholder="e.g. Birthday Party"
+                    value={eventName}
+                    onChange={(e) => setEventName(e.target.value)}
+                  />
+                </FormControl>
 
-  <FormControl mb={3}>
-    <FormLabel>Event Name</FormLabel>
-    <Input
-      placeholder="e.g. Birthday Party"
-      value={eventName}
-      onChange={(e) => setEventName(e.target.value)}
-    />
-  </FormControl>
+                <FormControl mb={3}>
+                  <FormLabel>Event Time</FormLabel>
+                  <Input
+                    type="time"
+                    value={eventTime}
+                    onChange={(e) => setEventTime(e.target.value)}
+                  />
+                </FormControl>
 
-  <FormControl mb={3}>
-    <FormLabel>Event Time</FormLabel>
-    <Input
-      type="time"
-      value={eventTime}
-      onChange={(e) => setEventTime(e.target.value)}
-    />
-  </FormControl>
-
-  <FormControl>
-    <FormLabel>Duration (hours)</FormLabel>
-    <Input
-      type="number"
-      placeholder="e.g. 4"
-      value={duration}
-      onChange={(e) => setDuration(e.target.value)}
-    />
-  </FormControl>
-</Box>
->>>>>>> 47c648d3615c8d49648a8f80830c9d6ca71dade9
+                <FormControl>
+                  <FormLabel>Duration (hours)</FormLabel>
+                  <Input
+                    type="number"
+                    placeholder="e.g. 4"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                  />
+                </FormControl>
+              </Box>
 
               <FormControl mb={3}>
                 <FormLabel>Event Time</FormLabel>
@@ -457,14 +441,9 @@ export default function VenueDetailPage({
         </Box>
       </Flex>
 
-<<<<<<< HEAD
       {/* Reviews section */}
       {venue && <VenueReviews venueId={venue.id} />}
-=======
-        {/* Reviews section */}
-     {venue && <VenueReviews venueId={venue.id} />}
-     {venue && <WriteReview venueId={venue.id} />}
->>>>>>> 47c648d3615c8d49648a8f80830c9d6ca71dade9
+      {venue && <WriteReview venueId={venue.id} />}
     </Box>
   );
 }
