@@ -37,11 +37,11 @@ export default function SignUp() {
     localStorage.setItem('vv_users', JSON.stringify(users));
 
     // Auto-login after signup
-    localStorage.setItem('vv_currentUser', JSON.stringify({ name, email }));
+    // localStorage.setItem('vv_currentUser', JSON.stringify({ name, email }));
 
-    toast({ title: 'Account created successfully!', status: 'success' });
-    setCurrentUser({ name, email });
-    router.push('/'); // redirect to home
+    // toast({ title: 'Account created successfully!', status: 'success' });
+    // setCurrentUser({ name, email });
+    router.push('/signin'); // redirect to home
   };
 
   return (

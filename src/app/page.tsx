@@ -38,9 +38,18 @@ export default function Home() {
       const lsVenues = localStorage.getItem('vv_venues') || '[]';
       try {
         const allVenues = JSON.parse(lsVenues);
-        const filteredVenues = allVenues.filter((dbVenue) =>
-          dbVenue.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        let filteredVenues = allVenues.filter(
+          (dbVenue) =>
+            dbVenue.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            dbVenue.location?.toLowerCase().includes(searchQuery.toLowerCase()),
         );
+
+        console.log('filteredVenues', filteredVenues);
+
+        if (capacityRef.current && capacityRef.current.value) {
+          filteredVenues = filteredVenues.filter(venue => venue.capacity >= Number(capacityRef.current.value))
+        }
+
         setVenues(filteredVenues);
       } catch {}
 
@@ -49,15 +58,17 @@ export default function Home() {
     }
   };
 
+  const capacityRef = useRef(null);
+
   return (
     <div>
       <div className='px-50 mt-4'>
         <form onSubmit={onVenueSearch}>
-          <FormControl className='flex flex-row items-center justify-center gap-2 mb-8'>
+          <FormControl className='flex flex-row items-center justify-center gap-2'>
             <Input
               type='text'
               name='query'
-              placeholder='Search venue...'
+              placeholder='Search venue by name or location...'
               ref={searchQueryRef}
             />
             <Button
@@ -69,10 +80,16 @@ export default function Home() {
             </Button>
             <Button onClick={() => setVenues(allVenues)}>Clear</Button>
           </FormControl>
+          <Input
+            type='number'
+            name='query'
+            placeholder='Capacity'
+            ref={capacityRef}
+          />
         </form>
       </div>
 
-      <div id='venues-container' style={{ paddingTop: '20px' }}>
+      <div id='venues-container' className='py-8'>
         {venues.map((venue) => (
           <VenueCard key={venue.name} venue={venue} />
         ))}
