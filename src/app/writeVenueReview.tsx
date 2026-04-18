@@ -30,14 +30,49 @@ export default function WriteReview({ venueId }: { venueId: number }) {
       rating: Number(rating),
       comment: comment.trim(),
     };
-    
+
     const updatedReviews = [...reviews, newReview];
     localStorage.setItem('vv_reviews', JSON.stringify(updatedReviews));
     setRating('');
     setComment('');
     alert('Review submitted!');
     window.location.reload();
+
 }
+
+return (
+  <Box mt={8}>
+    <VStack spacing={4} align="stretch">
+      <FormControl isRequired>
+        <FormLabel>Rating</FormLabel>
+        <Select
+          placeholder="Select rating"
+          value={rating}
+          onChange={(e) => setRating(e.target.value)}
+        >
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </Select>
+      </FormControl>
+
+      <FormControl isRequired>
+        <FormLabel>Comment</FormLabel>
+        <Textarea
+          placeholder="Write your review here"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+      </FormControl>
+
+      <Button colorScheme="blue" onClick={handleSubmitReview}>
+        Submit Review
+      </Button>
+    </VStack>
+  </Box>
+);
 
 
 }

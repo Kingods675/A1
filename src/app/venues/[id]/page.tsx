@@ -12,7 +12,7 @@ import {
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { AppContext } from '@/app/store/ContextProvider';
 import VenueReviews  from '@/app/venueReviews'; //importing the venueReviews component for display
-
+import WriteReview from '@/app/writeVenueReview';
 
 export default function VenueDetailPage({
   params,
@@ -261,7 +261,7 @@ const [duration, setDuration] = useState('');
 
         {/* Reviews section */}
      {venue && <VenueReviews venueId={venue.id} />}
-
+     {venue && <WriteReview venueId={venue.id} />}
     </Box>
   );
 }
