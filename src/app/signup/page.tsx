@@ -51,22 +51,22 @@ export default function SignUp() {
         <VStack spacing={5}>
           <FormControl isRequired>
             <FormLabel>Full Name</FormLabel>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="John Doe" />
+            <Input value={name} name="fullName" onChange={(e) => setName(e.target.value)} placeholder="John Doe" />
           </FormControl>
 
           <FormControl isRequired>
             <FormLabel>Email</FormLabel>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" />
+            <Input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" />
           </FormControl>
 
           <FormControl isRequired>
             <FormLabel>Password</FormLabel>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </FormControl>
 
           <FormControl isRequired>
             <FormLabel>Confirm Password</FormLabel>
-            <Input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+            <Input type="password" name="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
           </FormControl>
 
           <Button type="submit" colorScheme="blue" size="lg" w="full">

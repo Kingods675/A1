@@ -5,8 +5,6 @@ import Link from 'next/link';
 
 export default function VenueCard(props) {
     const { venue } = props;
-    console.log(venue);
-
 
     return (
         <Link href={`/venues/${venue.id}`} style={{ textDecoration: 'none' }}>

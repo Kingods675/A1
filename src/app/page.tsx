@@ -7,7 +7,7 @@ import './home.css';
 import { useEffect, useRef, useState } from 'react';
 import { Button, FormControl, Input } from '@chakra-ui/react';
 
-export default function Home() {
+export default function HomePage() {
   const [venues, setVenues] = useState([]);
   const [allVenues, setAllVenues] = useState([]);
 
@@ -78,7 +78,7 @@ export default function Home() {
           <div className='absolute inset-0 flex items-center'>
             <div className='px-12 md:px-20 text-white w-full'>
 
-              <p
+              <h1
                 className='mb-2 text-white'
                 style={{
                   fontSize: 'clamp(4rem, 10vw, 8rem)',
@@ -87,7 +87,7 @@ export default function Home() {
                   letterSpacing: '-0.04em',
                 }}
               >Venue Vendors
-              </p>
+              </h1>
               <p className='text-2xl md:text-3xl font-semibold mb-3 max-w-3xl'>
                 Melbourne’s Home for Event Hiring
               </p>
