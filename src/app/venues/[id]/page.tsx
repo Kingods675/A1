@@ -267,7 +267,7 @@ export default function VenueDetailPage({
             borderRadius='2xl'
             mb={6}
           />
-          <Heading size='2xl'>{venue.name}</Heading>
+          <Heading size='2xl' as="h2">{venue.name}</Heading>
           <HStack mb={4}>
             <Badge colorScheme='green' fontSize='md' px={3} py={1}>
               {venue.location}
