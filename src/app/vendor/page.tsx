@@ -63,6 +63,22 @@ export default function VenuesPage() {
     setBookingRequests(mine);
   }, [currentUser]);
 
+
+  const getCredibilityScore = (docs: any): number => {
+    if (!docs) return 0;
+    const count = Object.keys(docs).length;
+    if (count === 1) return 1;
+    if (count === 2) return 3;
+    if (count >= 3) return 5;
+    return 0;
+  };
+
+  const StarRating = ({ score }: { score: number }) => (
+    <Text fontSize="2xl" color="yellow.400" letterSpacing="1px">
+      {'★'.repeat(score)}{'☆'.repeat(5 - score)}
+    </Text>
+  );
+
   const handlePostVenue = (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser) return;
@@ -109,6 +125,77 @@ export default function VenuesPage() {
   };
 
   if (!currentUser) return <Text p={8}>Redirecting...</Text>;
+  const renderDocuments = (docs: any) => {
+    if (!docs) return <Text color="gray.400">No documents uploaded</Text>;
+
+    return (
+      <VStack align="start" spacing={4} mt={3}>
+        {/* Driver's License - Image */}
+        {docs.driverLicense && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>Driver's License</Text>
+            <img
+              src={`data:image/jpeg;base64,${docs.driverLicense}`}
+              alt="Driver's License"
+              style={{ maxWidth: '220px', borderRadius: '8px', border: '1px solid #ddd' }}
+            />
+          </Box>
+        )}
+
+        {/* Public Liability Insurance - PDF */}
+        {docs.publicLiabilityInsurance && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>Public Liability Insurance</Text>
+            <Button
+              size="sm"
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = `data:application/pdf;base64,${docs.publicLiabilityInsurance}`;
+                link.download = 'Public_Liability_Insurance.pdf';
+                link.target = '_blank';
+                link.click();
+              }}
+            >
+              📄 View Insurance Certificate
+            </Button>
+          </Box>
+        )}
+
+        {/* ABN Number */}
+        {docs.abnNumber && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>ABN Number</Text>
+            <Text fontSize="lg" fontWeight="medium" color="blue.600">
+              {docs.abnNumber}
+            </Text>
+          </Box>
+        )}
+
+        {/* Business Certificate - PDF */}
+        {docs.businessCertificate && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>Business Registration Certificate</Text>
+            <Button
+              size="sm"
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = `data:application/pdf;base64,${docs.businessCertificate}`;
+                link.download = 'Business_Registration_Certificate.pdf';
+                link.target = '_blank';
+                link.click();
+              }}
+            >
+              📄 View Business Certificate
+            </Button>
+          </Box>
+        )}
+      </VStack>
+    );
+  };
 
   return (
     <Box maxW='80vw' mx='auto' py={10}>
@@ -230,66 +317,89 @@ export default function VenuesPage() {
               <Text>No pending booking requests.</Text>
             ) : (
               <SimpleGrid columns={[1, 2]} spacing={6}>
-                {bookingRequests.map((req: any) => (
-                  <Box
-                    key={req.id}
-                    bg='white'
-                    p={6}
-                    borderRadius='2xl'
-                    boxShadow='md'
-                  >
-                    <HStack>
-                      <Image
-                        src={req.venue.imgSrc}
-                        alt=''
-                        boxSize='80px'
-                        borderRadius='lg'
-                        objectFit='cover'
-                      />
-                      <Box flex={1}>
-                        <Heading size='md'>{req.venue.name}</Heading>
-                        <Text color='gray.500'>
-                          Requested by: {req.hirerName}
-                        </Text>
-                        <Text>
-                          {req.checkIn} → {req.checkOut} ({req.nights} nights)
-                        </Text>
-                        <Text>
-                          Guests: {req.guests} | Total: ${req.total}
-                        </Text>
-                      </Box>
-                    </HStack>
-                    <div>
+                {bookingRequests.map((req: any) => {
+                  const score = getCredibilityScore(req.additionalDocuments);
+                  return (
+                    <Box
+                      key={req.id}
+                      bg='white'
+                      p={6}
+                      borderRadius='2xl'
+                      boxShadow='md'
+                    >
+                      <HStack>
+                        <Image
+                          src={req.venue.imgSrc}
+                          alt=''
+                          boxSize='80px'
+                          borderRadius='lg'
+                          objectFit='cover'
+                        />
+                        <Box flex={1}>
+                          <Heading size='md'>{req.venue.name}</Heading>
+                          <Text color='gray.500'>
+                            Requested by: {req.hirerName}
+                          </Text>
+                          <Text>
+                            {req.checkIn} → {req.checkOut} ({req.nights} nights)
+                          </Text>
+                          <Text>
+                            Guests: {req.guests} | Total: ${req.total}
+                          </Text>
+                        </Box>
+                      </HStack>
+                      {/* <div>
                       <h1>Addtional documents</h1>
                       <h2>Driver's License</h2>
                       <img
                         src={`data:image/jpeg;base64,${req.additionalDocuments?.driverLicense}`}
                         alt='Driver Licence'
                       />
-                    </div>
-                    <HStack mt={6} spacing={4}>
-                      {req.status === 'pending' && (
-                        <>
-                          <Button
-                            colorScheme='green'
-                            onClick={() => acceptBooking(req.id)}
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            colorScheme='red'
-                            variant='outline'
-                            onClick={() => rejectBooking(req.id)}
-                          >
-                            Reject
-                          </Button>
-                        </>
-                      )}
-                      {req.status === 'confirmed' && <span>Confirmed</span>}
-                      {req.status === 'rejected' && <span>Rejected</span>}
-                    </HStack>
-                  </Box>
-                ))}
+                    </div> */}
+
+                      <HStack mt={3}>
+                        <Text fontWeight="semibold">Hirer Credibility:</Text>
+                        <StarRating score={score} />
+                        <Text fontSize="sm" color="gray.500">({score}/5)</Text>
+                      </HStack>
+
+                      <Box pt={3} w="full">
+                        <Text fontWeight="semibold" mb={2}>Uploaded Documents</Text>
+                        {renderDocuments(req.additionalDocuments)}
+                      </Box>
+
+                      <HStack mt={6} spacing={4}>
+                        {req.status === 'pending' && (
+                          <>
+                            <Button
+                              colorScheme='green'
+                              onClick={() => acceptBooking(req.id)}
+                            >
+                              Accept
+                            </Button>
+                            <Button
+                              colorScheme='red'
+                              variant='outline'
+                              onClick={() => rejectBooking(req.id)}
+                            >
+                              Reject
+                            </Button>
+                          </>
+                        )}
+                        {req.status === 'confirmed' && (
+                          <Badge colorScheme="green" fontSize="md" px={4} py={1} borderRadius="full">
+                            Confirmed
+                          </Badge>
+                        )}
+                        {req.status === 'rejected' && (
+                          <Badge colorScheme="red" fontSize="md" px={4} py={1} borderRadius="full">
+                            Rejected
+                          </Badge>
+                        )}
+                      </HStack>
+                    </Box>
+                  );
+                })}
               </SimpleGrid>
             )}
           </TabPanel>

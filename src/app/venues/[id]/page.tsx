@@ -24,12 +24,14 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Checkbox,
 } from '@chakra-ui/react';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { AppContext } from '@/app/store/ContextProvider';
 
 import VenueReviews from '@/app/venueReviews'; //importing the venueReviews component for display
 import WriteReview from '@/app/writeVenueReview';
+import { log } from 'console';
 
 export default function VenueDetailPage({
   params,
@@ -54,6 +56,10 @@ export default function VenueDetailPage({
   const [eventName, setEventName] = useState('');
   const [eventTime, setEventTime] = useState('');
   const [duration, setDuration] = useState('');
+
+  const [isBusiness, setIsBusiness] = useState(false);
+  const [abnNumber, setAbnNumber] = useState('');
+
   const [creditStar, setCreditStar] = useState(0);
 
 
@@ -94,7 +100,34 @@ export default function VenueDetailPage({
   const minStartDate = new Date().toISOString().split('T')[0];
 
   const driverLicenceInputRef = useRef(null);
+  const insuranceInputRef = useRef(null);
+  const businessCertInputRef = useRef(null);
 
+  // Additional documents
+  const toBase64 = (file: File) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+
+  const calculateCredibility = async () => {
+    const files = [
+      driverLicenceInputRef.current?.files?.[0],
+      insuranceInputRef.current?.files?.[0],
+      businessCertInputRef.current?.files?.[0],
+    ].filter(Boolean);
+
+    const docCount = files.length;
+
+    let score = 0;
+    if (docCount === 1) score = 1;
+    else if (docCount === 2) score = 3;
+    else if (docCount >= 3) score = 5;
+
+    setCreditStar(score);
+  };
   const handleReserve = async () => {
     if (!checkIn || !checkOut) {
       toast({ title: 'Please select both dates', status: 'error' });
@@ -105,40 +138,50 @@ export default function VenueDetailPage({
       return;
     }
 
-    // Additional documents
-    const toBase64 = (file: File) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+    let driverBase64 = null;
+    let insuranceBase64 = null;
+    let businessCertBase64 = null;
 
-    let base64 = null;
-    if (driverLicenceInputRef.current) {
-      setCreditStar(0);
-      console.log('file:', driverLicenceInputRef.current.files[0]); // File object
-      const file = driverLicenceInputRef.current.files[0];
-      if (!file) return;
-
-      base64 = await toBase64(file);
-      console.log('base64:', base64);
-      
+    if (driverLicenceInputRef.current?.files?.[0]) {
+      driverBase64 = await toBase64(driverLicenceInputRef.current.files[0]);
+      // console.log('file:', driverLicenceInputRef.current.files[0]);
+    }
+    if (insuranceInputRef.current?.files?.[0]) {
+      insuranceBase64 = await toBase64(insuranceInputRef.current.files[0]);
+      // console.log('file:', insuranceInputRef.current.files[0]);
+    }
+    if (businessCertInputRef.current?.files?.[0]) {
+      businessCertBase64 = await toBase64(businessCertInputRef.current.files[0]);
+      // console.log('file:', businessCertInputRef.current.files[0]);
     }
 
+
+
+    // if (driverLicenceInputRef.current) {
+    //   setCreditStar(0);
+    //   // console.log('file:', driverLicenceInputRef.current.files[0]); // File object
+    //   const file = driverLicenceInputRef.current.files[0];
+    //   if (!file) return;
+
+    //   base64 = await toBase64(file);
+    //   // console.log('base64:', base64);
+
+    // }
+
     const additionalDocuments = {
-      driverLicense: base64,
+      driverLicense: driverBase64,
+      publicLiabilityInsurance: insuranceBase64,
+      businessCertificate: businessCertBase64,
+      abnNumber: isBusiness ? abnNumber : null,
     };
 
-    const docCount = Object.keys(additionalDocuments).length;
+    const docCount = Object.values(additionalDocuments).filter(Boolean).length - (isBusiness ? 1 : 0);
+    let finalCreditStar = 0;
+    if (docCount === 1) finalCreditStar = 1;
+    if (docCount === 2) finalCreditStar = 3;
+    if (docCount >= 3) finalCreditStar = 5;
 
-    let score = 0;
-    if (docCount === 1) score = 1;
-    else if (docCount === 2) score = 3;
-    else if (docCount >= 3) score = 5;
 
-    setCreditStar(score);
-  
 
     // auto calculate credit score based on the number of docs provided
     // if 1 document: credit: 1
@@ -180,7 +223,10 @@ export default function VenueDetailPage({
     setGuests(1);
     setDiscount({ valid: false, percentage: 0, amount: 0 });
     setCreditStar(0);
+    setIsBusiness(false); setAbnNumber('');
     if (driverLicenceInputRef.current) driverLicenceInputRef.current.value = '';
+    if (insuranceInputRef.current) insuranceInputRef.current.value = '';
+    if (businessCertInputRef.current) businessCertInputRef.current.value = '';
   };
 
   const applyDiscount = () => {
@@ -234,6 +280,10 @@ export default function VenueDetailPage({
           <Text fontSize='lg' color='gray.700'>
             Perfect for your next event in Melbourne.
           </Text>
+
+          {/* Reviews section */}
+          {venue && <VenueReviews venueId={venue.id} />}
+          {venue && <WriteReview venueId={venue.id} />}
         </Box>
 
         {/* Reservation Card (exactly like your old component) */}
@@ -414,26 +464,55 @@ export default function VenueDetailPage({
               <Text>Total amount</Text>
               <Text>${totalAfterDiscount.toFixed(2)}</Text>
             </HStack>
-            <FormControl mb={3}>
-              <Text fontSize='xl' fontWeight='bold'>
-                Additional documents
-              </Text>
-              <FormLabel>Applicant's driver’s license (jpg)</FormLabel>
-              <Input
-                type='file'
-                placeholder='e.g. Birthday Party'
-                ref={driverLicenceInputRef}
-                onChange={(e) => setEventName(e.target.value)}
-                accept='image/*'
-              />
+            <FormControl mt={8}>
+              <Text fontSize="xl" fontWeight="bold" mb={4}>Additional Documents</Text>
+
+              {/* Driver's License */}
+              <FormControl mb={4}>
+                <FormLabel>Driver’s License (jpg)</FormLabel>
+                <Input type="file" accept="image/*" ref={driverLicenceInputRef} onChange={calculateCredibility} />
+              </FormControl>
+
+              {/* Public Liability Insurance */}
+              <FormControl mb={4}>
+                <FormLabel>Public Liability Insurance Certificate (PDF)</FormLabel>
+                <Input type="file" accept="application/pdf" ref={insuranceInputRef} onChange={calculateCredibility} />
+              </FormControl>
+
+              {/* Business / Organisation Checkbox */}
+              <Checkbox
+                isChecked={isBusiness}
+                onChange={(e) => setIsBusiness(e.target.checked)}
+                mb={3}
+              >
+                I am applying on behalf of a business / organisation
+              </Checkbox>
+
+              {isBusiness && (
+                <VStack align="stretch" spacing={4} mt={2}>
+                  <FormControl>
+                    <FormLabel>ABN Number</FormLabel>
+                    <Input
+                      placeholder="e.g. 12 345 678 901"
+                      value={abnNumber}
+                      onChange={(e) => setAbnNumber(e.target.value)}
+                    />
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel>Certificate of Business Registration (PDF)</FormLabel>
+                    <Input type="file" accept="application/pdf" ref={businessCertInputRef} onChange={calculateCredibility} />
+                  </FormControl>
+                </VStack>
+              )}
             </FormControl>
 
             <HStack mt={4} align="center">
-            <Text fontWeight="semibold">Your Credibility Score:</Text>
-            <StarRating score={creditStar} />
-            <Text fontSize="sm" color="gray.500">({creditStar}/5)</Text>
-          </HStack>
-            
+              <Text fontWeight="semibold">Your Credibility Score:</Text>
+              <StarRating score={creditStar} />
+              <Text fontSize="sm" color="gray.500">({creditStar}/5)</Text>
+            </HStack>
+
             {/* Reserve Button */}
             <Button
               onClick={handleReserve}
@@ -449,10 +528,6 @@ export default function VenueDetailPage({
           </VStack>
         </Box>
       </Flex>
-
-      {/* Reviews section */}
-      {venue && <VenueReviews venueId={venue.id} />}
-      {venue && <WriteReview venueId={venue.id} />}
     </Box>
   );
 }

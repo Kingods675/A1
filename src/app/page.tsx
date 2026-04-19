@@ -51,7 +51,7 @@ export default function Home() {
         }
 
         setVenues(filteredVenues);
-      } catch {}
+      } catch { }
 
       // reset search query after done
       searchQueryRef.current.value = '';
@@ -63,71 +63,71 @@ export default function Home() {
   return (
     <div>
 
-    {/*Introduction to website*/}
-<div className='px-12 pt-8'>
-<div className='relative w-full h-[520px] rounded-3xl overflow-hidden shadow-xl'>
-<Image
-src='/MelbourneCity.jpg'
-alt='Melbourne skyline'
-fill
-className='object-cover'
-priority
-/>
-<div className='absolute inset-0 bg-black/35'></div>
+      {/*Introduction to website*/}
+      <div className='px-12 pt-8'>
+        <div className='relative w-full h-[520px] rounded-3xl overflow-hidden shadow-xl'>
+          <Image
+            src='/MelbourneCity.jpg'
+            alt='Melbourne skyline'
+            fill
+            className='object-cover'
+            priority
+          />
+          <div className='absolute inset-0 bg-black/35'></div>
 
-<div className='absolute inset-0 flex items-center'>
-<div className='px-12 md:px-20 text-white w-full'>
+          <div className='absolute inset-0 flex items-center'>
+            <div className='px-12 md:px-20 text-white w-full'>
 
-<p
-className='mb-2 text-white'
-style={{
-fontSize: 'clamp(4rem, 10vw, 8rem)',
-fontWeight: 800,
-lineHeight: 0.95,
-letterSpacing: '-0.04em',
-}}
->Venue Vendors
-</p>
-<p className='text-2xl md:text-3xl font-semibold mb-3 max-w-3xl'>
-Melbourne’s Home for Event Hiring
-</p>
-<p className='text-base md:text-lg text-gray-200 max-w-xl'>
-Discover venues and manage your bookings in one place.
-</p>
-</div>
-</div>
-</div>
-</div>    
-    
+              <p
+                className='mb-2 text-white'
+                style={{
+                  fontSize: 'clamp(4rem, 10vw, 8rem)',
+                  fontWeight: 800,
+                  lineHeight: 0.95,
+                  letterSpacing: '-0.04em',
+                }}
+              >Venue Vendors
+              </p>
+              <p className='text-2xl md:text-3xl font-semibold mb-3 max-w-3xl'>
+                Melbourne’s Home for Event Hiring
+              </p>
+              <p className='text-base md:text-lg text-gray-200 max-w-xl'>
+                Discover venues and manage your bookings in one place.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
 
       <div className='px-32'>
-      <div className='px-50 mt-4'>
-        <form onSubmit={onVenueSearch}>
-          <FormControl className='flex flex-row items-center justify-center gap-2'>
+        <div className='px-50 mt-4'>
+          <form onSubmit={onVenueSearch}>
+            <FormControl className='flex flex-row items-center justify-center gap-2'>
+              <Input
+                type='text'
+                name='query'
+                placeholder='Search venue by name or location...'
+                ref={searchQueryRef}
+              />
+              <Button
+                // mt={4}
+                // colorScheme='blue'
+                type='submit'
+              >
+                Search
+              </Button>
+              <Button onClick={() => setVenues(allVenues)}>Clear</Button>
+            </FormControl>
             <Input
-              type='text'
+              type='number'
               name='query'
-              placeholder='Search venue by name or location...'
-              ref={searchQueryRef}
+              placeholder='Capacity'
+              ref={capacityRef}
             />
-            <Button
-              // mt={4}
-              // colorScheme='blue'
-              type='submit'
-            >
-              Search
-            </Button>
-            <Button onClick={() => setVenues(allVenues)}>Clear</Button>
-          </FormControl>
-          <Input
-            type='number'
-            name='query'
-            placeholder='Capacity'
-            ref={capacityRef}
-          />
-        </form>
-      </div>
+          </form>
+        </div>
       </div>
 
       <div id='venues-container' className='py-8'>

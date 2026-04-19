@@ -98,7 +98,77 @@ export default function MyBookingsPage() {
   }
 
   console.log(myBookings);
+  const renderDocuments = (docs: any) => {
+    if (!docs) return <Text color="gray.400">No documents uploaded</Text>;
 
+    return (
+      <VStack align="start" spacing={4} mt={3}>
+        {/* Driver's License - Image */}
+        {docs.driverLicense && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>Driver's License</Text>
+            <img
+              src={`data:image/jpeg;base64,${docs.driverLicense}`}
+              alt="Driver's License"
+              style={{ maxWidth: '220px', borderRadius: '8px', border: '1px solid #ddd' }}
+            />
+          </Box>
+        )}
+
+        {/* Public Liability Insurance - PDF */}
+        {docs.publicLiabilityInsurance && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>Public Liability Insurance</Text>
+            <Button
+              size="sm"
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = `data:application/pdf;base64,${docs.publicLiabilityInsurance}`;
+                link.download = 'Public_Liability_Insurance.pdf';
+                link.target = '_blank';
+                link.click();
+              }}
+            >
+              📄 View Insurance Certificate
+            </Button>
+          </Box>
+        )}
+
+        {/* Business Certificate - PDF */}
+        {docs.businessCertificate && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>Business Registration Certificate</Text>
+            <Button
+              size="sm"
+              colorScheme="blue"
+              variant="outline"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = `data:application/pdf;base64,${docs.businessCertificate}`;
+                link.download = 'Business_Registration_Certificate.pdf';
+                link.target = '_blank';
+                link.click();
+              }}
+            >
+              📄 View Business Certificate
+            </Button>
+          </Box>
+        )}
+
+        {/* ABN Number */}
+        {docs.abnNumber && (
+          <Box>
+            <Text fontWeight="semibold" fontSize="sm" mb={1}>ABN Number</Text>
+            <Text fontSize="lg" fontWeight="medium" color="blue.600">
+              {docs.abnNumber}
+            </Text>
+          </Box>
+        )}
+      </VStack>
+    );
+  };
   return (
     <Box maxW='80vw' mx='auto' py={10}>
       <Heading mb={8} textAlign='center' color='blue.600'>
@@ -156,36 +226,40 @@ export default function MyBookingsPage() {
 
                   <VStack align='start' spacing={2} fontSize='sm'>
                     <HStack>
+                      <Text fontWeight="semibold">Event Name:</Text>
+                      <Text>{booking.eventName || 'N/A'}</Text>
+                    </HStack>
+
+                    <HStack>
                       <Text fontWeight='semibold'>Check-in:</Text>
                       <Text>{booking.checkIn}</Text>
                     </HStack>
+
                     <HStack>
                       <Text fontWeight='semibold'>Check-out:</Text>
                       <Text>{booking.checkOut}</Text>
                     </HStack>
+
+                    <HStack>
+                      <Text fontWeight="semibold">Event Time:</Text>
+                      <Text>{booking.eventTime || 'N/A'}</Text>
+                    </HStack>
+
+                    <HStack>
+                      <Text fontWeight="semibold">Event Duration:</Text>
+                      <Text>{booking.eventDuration || 'N/A'}</Text>
+                    </HStack>
+
                     <HStack>
                       <Text fontWeight='semibold'>Nights:</Text>
                       <Text>{booking.nights}</Text>
                     </HStack>
+
                     <HStack>
                       <Text fontWeight='semibold'>Guests:</Text>
                       <Text>{booking.guests}</Text>
                     </HStack>
-
-                    {/*Adding event details section to the booking summary*/}
-                    <HStack>
-                      <Text fontWeight='semibold'>Event Name:</Text>
-                      <Text>{booking.eventName || 'N/A'}</Text>
-
-                      <Text fontWeight='semibold'>Event Time:</Text>
-                      <Text>{booking.eventTime || 'N/A'}</Text>
-
-                      <Text fontWeight='semibold'>Event Duration:</Text>
-                      <Text>{booking.eventDuration || 'N/A'}</Text>
-                    </HStack>
-
-                    {/*Adding preference ranking section to the booking summary*/}
-
+                    
                     <Box pt={2}>
                       <Text fontWeight='semibold' mb={2}>
                         Venue Preference Rank
@@ -229,12 +303,17 @@ export default function MyBookingsPage() {
                     </Box>
                   </VStack>
 
-                  <Divider my={4} />
+                  <Box pt={3} w="full">
+                    <Text fontWeight="semibold" mb={2}>Uploaded Documents</Text>
+                    {renderDocuments(booking.additionalDocuments)}
+                  </Box>
+
+                  {/* <Divider my={4} />
                   <img
                     src={`data:image/jpeg;base64,${booking.additionalDocuments?.driverLicense}`}
                     alt='Driver Licence'
                   />
-                  <Divider my={4} />
+                  <Divider my={4} /> */}
 
                   <HStack justify='space-between'>
                     <Text fontSize='lg' fontWeight='bold'>
