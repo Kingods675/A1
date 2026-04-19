@@ -231,7 +231,7 @@ export default function MyBookingsPage() {
 
                   <Divider my={4} />
                   <img
-                    src={`data:image/jpeg;base64,${booking.additionalDocuments.driverLicense}`}
+                    src={`data:image/jpeg;base64,${booking.additionalDocuments?.driverLicense}`}
                     alt='Driver Licence'
                   />
                   <Divider my={4} />

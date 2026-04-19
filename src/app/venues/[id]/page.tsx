@@ -54,6 +54,7 @@ export default function VenueDetailPage({
   const [eventName, setEventName] = useState('');
   const [eventTime, setEventTime] = useState('');
   const [duration, setDuration] = useState('');
+  const [creditStar, setCreditStar] = useState(0);
 
 
 
@@ -115,18 +116,29 @@ export default function VenueDetailPage({
 
     let base64 = null;
     if (driverLicenceInputRef.current) {
+      setCreditStar(0);
       console.log('file:', driverLicenceInputRef.current.files[0]); // File object
       const file = driverLicenceInputRef.current.files[0];
       if (!file) return;
 
       base64 = await toBase64(file);
       console.log('base64:', base64);
+      
     }
 
-    let creditStar = 0
     const additionalDocuments = {
       driverLicense: base64,
     };
+
+    const docCount = Object.keys(additionalDocuments).length;
+
+    let score = 0;
+    if (docCount === 1) score = 1;
+    else if (docCount === 2) score = 3;
+    else if (docCount >= 3) score = 5;
+
+    setCreditStar(score);
+  
 
     // auto calculate credit score based on the number of docs provided
     // if 1 document: credit: 1
@@ -149,6 +161,7 @@ export default function VenueDetailPage({
       total: totalAfterDiscount,
       status: 'pending',
       additionalDocuments,
+      creditStar: finalCreditStar,
     };
 
     bookings.push(newBooking);
@@ -166,6 +179,8 @@ export default function VenueDetailPage({
     setCheckOut('');
     setGuests(1);
     setDiscount({ valid: false, percentage: 0, amount: 0 });
+    setCreditStar(0);
+    if (driverLicenceInputRef.current) driverLicenceInputRef.current.value = '';
   };
 
   const applyDiscount = () => {
@@ -178,6 +193,12 @@ export default function VenueDetailPage({
       toast({ title: 'Invalid code', status: 'error' });
     }
   };
+
+  const StarRating = ({ score }: { score: number }) => (
+    <Text fontSize="2xl" color="yellow.400" letterSpacing="1px">
+      {'★'.repeat(score)}{'☆'.repeat(5 - score)}
+    </Text>
+  );
 
   if (!venue)
     return (
@@ -255,25 +276,6 @@ export default function VenueDetailPage({
                     placeholder="e.g. Birthday Party"
                     value={eventName}
                     onChange={(e) => setEventName(e.target.value)}
-                  />
-                </FormControl>
-
-                <FormControl mb={3}>
-                  <FormLabel>Event Time</FormLabel>
-                  <Input
-                    type="time"
-                    value={eventTime}
-                    onChange={(e) => setEventTime(e.target.value)}
-                  />
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel>Duration (hours)</FormLabel>
-                  <Input
-                    type="number"
-                    placeholder="e.g. 4"
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.value)}
                   />
                 </FormControl>
               </Box>
@@ -425,6 +427,13 @@ export default function VenueDetailPage({
                 accept='image/*'
               />
             </FormControl>
+
+            <HStack mt={4} align="center">
+            <Text fontWeight="semibold">Your Credibility Score:</Text>
+            <StarRating score={creditStar} />
+            <Text fontSize="sm" color="gray.500">({creditStar}/5)</Text>
+          </HStack>
+            
             {/* Reserve Button */}
             <Button
               onClick={handleReserve}
